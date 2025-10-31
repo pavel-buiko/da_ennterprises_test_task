@@ -28,11 +28,23 @@ model Session {
   user User @relation(fields: [userId], references: [id])
   refreshToken String @map("refresh_token") @db.Text
   ip String?
-  userAgent String?
-  createdAt DateTime @default(now())
-  expiresAt DateTime
+  userAgent String? @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
   revoked Boolean @default(false)
 
   @@index([userId])
   @@index([ip])
 }
+
+model FileRecord {
+  id String @id @default(uuid())
+  originalName String @map("original_name")
+  name String
+  extension String?
+  mime String
+  size Int
+  path String
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+}
+

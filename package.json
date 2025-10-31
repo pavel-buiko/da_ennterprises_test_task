@@ -7,7 +7,6 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon --watch ./src --ext ts --exec \"node --loader ts-node/esm ./src/index.ts\"",
     "dev": "nodemon --watch src --exec tsx src/index.ts"
   },
   "dependencies": {
@@ -19,6 +18,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -26,6 +26,7 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
+    "@types/multer": "^2.0.0",
     "@types/node": "^24.9.2",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
