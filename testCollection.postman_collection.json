@@ -1,0 +1,523 @@
+{
+	"info": {
+		"_postman_id": "87181cc3-9dfe-4b74-bfe5-ccc1a433332d",
+		"name": "testCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34965294",
+		"_collection_link": "https://dodiki-9955.postman.co/workspace/My-Workspace~243bca4b-f453-4d92-86e6-8ccbf790767b/collection/34965294-87181cc3-9dfe-4b74-bfe5-ccc1a433332d?action=share&source=collection_link&creator=34965294"
+	},
+	"item": [
+		{
+			"name": "LogOut",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsInNpZCI6ImM1MGMyZmQzLWQxYWEtNGU5My1iMDM0LTQyMzI2ZGU4ZDc5YyIsImlhdCI6MTc2MTkxNjk0NywiZXhwIjoxNzYxOTE3NTQ3fQ.sdVHy09IlXczNYXz2slbHiwrNWYA08oQNitO8TMm9qs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IndyaXRlciIsInJvbGUiOiJXUklURVIiLCJuYmYiOjE3NjA2Mzg2NTksImV4cCI6MTc2MDY0MjI1OSwiaWF0IjoxNzYwNjM4NjU5fQ.rWl_aL3MjebJI1vD8VxDttru9yPXxM211UCL3s2yAaA",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "User-Agent",
+						"value": "Device1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"email@gay.com\",\r\n    \"password\": \"111111\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignIn",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Device1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"email@gay.com\",\r\n    \"password\": \"111111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/signin",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "new_token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/signin/new_token",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signin",
+						"new_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsImlhdCI6MTc2MTgyNDkzNywiZXhwIjoxNzYxODI1NTM3fQ.AS0kKyBURVpfc2cEYUvF2teI63N2Ta9n0ngQJ_fXOic",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/api/info",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Сохраняем refreshToken из cookies\r",
+							"const refreshCookie = pm.cookies.get(\"refreshToken\");\r",
+							"if (refreshCookie) {\r",
+							"    pm.environment.set(\"refreshToken\", refreshCookie);\r",
+							"}\r",
+							"\r",
+							"// Сохраняем accessToken из тела ответа\r",
+							"const responseJson = pm.response.json();\r",
+							"if (responseJson.accessToken) {\r",
+							"    pm.environment.set(\"accessToken\", responseJson.accessToken);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsImlhdCI6MTc2MTgyNDkzNywiZXhwIjoxNzYxODI1NTM3fQ.AS0kKyBURVpfc2cEYUvF2teI63N2Ta9n0ngQJ_fXOic",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Device1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"email@gay.com\",\r\n    \"password\": \"111111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/signin",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Сохраняем refreshToken из cookies\r",
+							"const refreshCookie = pm.cookies.get(\"refreshToken\");\r",
+							"if (refreshCookie) {\r",
+							"    pm.environment.set(\"refreshToken\", refreshCookie);\r",
+							"}\r",
+							"\r",
+							"// Сохраняем accessToken из тела ответа\r",
+							"const responseJson = pm.response.json();\r",
+							"if (responseJson.accessToken) {\r",
+							"    pm.environment.set(\"accessToken\", responseJson.accessToken);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Device2",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"email@gay.com\",\r\n    \"password\": \"111111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/signin",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignOut1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsImlhdCI6MTc2MTgyNzAyNywiZXhwIjoxNzYxODI3NjI3fQ.Jxlx4aAsk5nvtxFRz7IJVStw_AP98gvZOxw9pLMDFmY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Device1",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": " refreshToken={{refreshToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"email@gay.com\",\r\n    \"password\": \"111111\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/signout",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignOut2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IndyaXRlciIsInJvbGUiOiJXUklURVIiLCJuYmYiOjE3NjA2Mzg2NTksImV4cCI6MTc2MDY0MjI1OSwiaWF0IjoxNzYwNjM4NjU5fQ.rWl_aL3MjebJI1vD8VxDttru9yPXxM211UCL3s2yAaA",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "User-Agent",
+						"value": "Device2",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": " refreshToken={{refreshToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"email@gay.com\",\r\n    \"password\": \"111111\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/signout",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UploadFile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsImlhdCI6MTc2MTkwODAxMiwiZXhwIjoxNzYxOTA4NjEyfQ.h3856g4UJ0IHNvon_hzosnPLSZ3NC4BvzrH3Rng5NKg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/pavel/Desktop/практика.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/file/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"file",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FileList",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsImlhdCI6MTc2MTkxMDk2MywiZXhwIjoxNzYxOTExNTYzfQ.dFVz5spjjM9Gmu39ypcOOVbkV3vxPk72ugjQt0jravE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/D:/work/erp.aero/server/testfiles/index.js",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/file/list?list_size=1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"file",
+						"list"
+					],
+					"query": [
+						{
+							"key": "list_size",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOneFileInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteFile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA3YWU4Y2M1LTg1ZjEtNDc0ZC1iYzE1LWJiYWQ4NjJkYTUwNSIsImxvZ2luIjoiZW1haWxAZ2F5LmNvbSIsImlhdCI6MTc2MTkxMDk2MywiZXhwIjoxNzYxOTExNTYzfQ.dFVz5spjjM9Gmu39ypcOOVbkV3vxPk72ugjQt0jravE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/pavel/Desktop/практика.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/file/delete/0953f669-40e8-4eca-a413-427884034b81",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"file",
+						"delete",
+						"0953f669-40e8-4eca-a413-427884034b81"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadFile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	]
+}
