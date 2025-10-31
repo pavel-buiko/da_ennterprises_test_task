@@ -31,3 +31,9 @@ router.get('/info', AuthMiddleware, userController.info);
 router.post('/file/upload', AuthMiddleware, upload.single('file'), fileController.upload);
 
 router.get('/file/list', AuthMiddleware, fileController.list);
+
+router.get('/file/:id', AuthMiddleware, fileController.getOne);
+
+router.delete('/file/delete/:id', AuthMiddleware, fileController.delete);
+
+router.get('/file/download/:id', AuthMiddleware, fileController.download);

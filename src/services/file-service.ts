@@ -1,4 +1,7 @@
+import { unlink } from 'fs/promises';
 import { prisma } from '../prismaClient.js';
+import path from 'path';
+import { ApiError } from '../exceptions/api-error.js';
 
 class FileService {
   async createFileRecord(file: Express.Multer.File) {
@@ -37,6 +40,31 @@ class FileService {
     const totalPages = Math.max(1, Math.ceil(total / take));
 
     return { items, pagination: { page, listSize: take, total, totalPages } };
+  }
+
+  async deleteFile(id: string) {
+    const record = await prisma.fileRecord.findUnique({ where: { id } });
+    if (!record) {
+      throw ApiError.BadRequest(`Файл с id ${id} не найден`);
+    }
+
+    const absolutePath = path.join(process.cwd(), record.path);
+
+    try {
+      await unlink(absolutePath);
+    } catch (err: any) {
+      if (err.code !== 'ENOENT') {
+        throw err;
+      }
+    }
+
+    await prisma.fileRecord.delete({ where: { id } });
+
+    return true;
+  }
+
+  getById(id: string) {
+    return prisma.fileRecord.findUnique({ where: { id } });
   }
 }
 
