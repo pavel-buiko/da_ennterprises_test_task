@@ -66,6 +66,45 @@ class FileService {
   getById(id: string) {
     return prisma.fileRecord.findUnique({ where: { id } });
   }
+
+  async updateFile(id: string, file: Express.Multer.File) {
+    const record = await prisma.fileRecord.findUnique({ where: { id } });
+    if (!record) {
+      throw ApiError.BadRequest(`Файл с id ${id} не найден`);
+    }
+
+    const originalName = file.originalname;
+    const parts = originalName.split('.');
+    const extension = parts.length > 1 ? (parts.pop() ?? '') : '';
+    const name = parts.join('.') || originalName;
+
+    const updated = await prisma.fileRecord.update({
+      where: { id },
+      data: {
+        originalName,
+        name,
+        extension,
+        mime: file.mimetype,
+        size: file.size,
+        path: file.path,
+        uploadedAt: new Date(),
+      },
+    });
+
+    const oldAbs = path.join(process.cwd(), record.path);
+    const newAbs = path.join(process.cwd(), updated.path);
+    if (oldAbs !== newAbs) {
+      try {
+        await unlink(oldAbs);
+      } catch (err: any) {
+        if (err.code !== 'ENOENT') {
+          throw err;
+        }
+      }
+    }
+
+    return updated;
+  }
 }
 
 export const fileService = new FileService();

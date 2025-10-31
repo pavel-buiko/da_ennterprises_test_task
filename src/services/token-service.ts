@@ -8,6 +8,7 @@ dotenv.config();
 interface TokenPayload {
   id: string;
   login: string;
+  sid?: string;
 }
 
 class TokenService {
@@ -22,13 +23,18 @@ class TokenService {
     this.refreshSecret = refreshSecret;
   }
 
-  generateTokens(payload: TokenPayload) {
-    const accessToken = jwt.sign(payload, this.accessSecret, { expiresIn: '10m' });
-    const refreshToken = jwt.sign(payload, this.refreshSecret, { expiresIn: '14d' });
-    return {
-      accessToken,
-      refreshToken,
-    };
+  generateAccessToken(payload: TokenPayload) {
+    return jwt.sign(payload, this.accessSecret, { expiresIn: '10m' });
+  }
+
+  generateRefreshToken(payload: { id: string; login: string }) {
+    return jwt.sign(payload, this.refreshSecret, { expiresIn: '14d' });
+  }
+
+  generateTokens(payload: { id: string; login: string; sid?: string }) {
+    const accessToken = this.generateAccessToken({ id: payload.id, login: payload.login, sid: payload.sid });
+    const refreshToken = this.generateRefreshToken({ id: payload.id, login: payload.login });
+    return { accessToken, refreshToken };
   }
 
   async saveRefreshToken(userId: string, refreshToken: string, ip: string, userAgent?: string) {
@@ -69,8 +75,7 @@ class TokenService {
 
   validateRefreshToken(token: string) {
     try {
-      const userData = jwt.verify(token, this.refreshSecret) as TokenPayload;
-
+      const userData = jwt.verify(token, this.refreshSecret) as { id: string; login: string };
       return userData;
     } catch (error) {
       return null;
@@ -78,7 +83,7 @@ class TokenService {
   }
 
   async findRefreshToken(token: string) {
-    const tokenData = prisma.session.findFirst({
+    const tokenData = await prisma.session.findFirst({
       where: { refreshToken: token },
     });
     return tokenData;

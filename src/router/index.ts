@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post('/signout', userController.signout);
+router.post('/logout', userController.signout);
 
 router.post('/signup', userController.signup);
 
@@ -37,3 +37,5 @@ router.get('/file/:id', AuthMiddleware, fileController.getOne);
 router.delete('/file/delete/:id', AuthMiddleware, fileController.delete);
 
 router.get('/file/download/:id', AuthMiddleware, fileController.download);
+
+router.put('/file/update/:id', AuthMiddleware, upload.single('file'), fileController.update);

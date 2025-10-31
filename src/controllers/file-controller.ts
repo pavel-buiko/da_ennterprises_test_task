@@ -39,7 +39,7 @@ class FileController {
   getOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!req.params.id) {
-        return ApiError.BadRequest('Id не указан');
+        return next(ApiError.BadRequest('Id не указан'));
       }
 
       const data = await fileService.getById(req.params.id);
@@ -53,7 +53,7 @@ class FileController {
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      if (!id) return res.status(400).json({ message: 'Id не указан' });
+      if (!id) return next(ApiError.BadRequest('Id не указан'));
 
       await fileService.deleteFile(id);
 
@@ -76,6 +76,22 @@ class FileController {
       return res.download(absolutePath, record.originalName, (err) => {
         if (err) return next(err);
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  update = async (req: RequestWithFile, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+      if (!id) return res.status(400).json({ message: 'Id не указан' });
+
+      const file = req.file;
+      if (!file) return res.status(400).json({ message: 'Новый файл не предоставлен' });
+
+      const updated = await fileService.updateFile(id, file);
+
+      return res.json(updated);
     } catch (error) {
       next(error);
     }

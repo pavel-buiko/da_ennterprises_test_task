@@ -24,7 +24,7 @@ class UserService {
   async refresh(token: string, ip: string, userAgent: string) {
     if (!token) throw ApiError.UnauthorizedError();
 
-    const userData = await tokenService.validateRefreshToken(token);
+    const userData = tokenService.validateRefreshToken(token);
     const tokenData = await tokenService.findRefreshToken(token);
 
     if (!userData || !tokenData) throw ApiError.UnauthorizedError();
@@ -71,22 +71,23 @@ class UserService {
       },
     });
 
-    const tokens = tokenService.generateTokens({ id: payload.id, login: payload.login });
+    const refreshToken = tokenService.generateRefreshToken({ id: payload.id, login: payload.login });
 
     if (session) {
       session = await prisma.session.update({
         where: { id: session.id },
         data: {
-          refreshToken: tokens.refreshToken,
+          refreshToken,
           expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
         },
       });
     } else {
-      session = await tokenService.saveRefreshToken(payload.id, tokens.refreshToken, payload.ip, payload.userAgent);
+      session = await tokenService.saveRefreshToken(payload.id, refreshToken, payload.ip, payload.userAgent);
     }
+    const accessToken = tokenService.generateAccessToken({ id: payload.id, login: payload.login, sid: session.id });
 
-    const safeUser = new UserDto(payload);
-    return { ...tokens, safeUser };
+    const safeUser = new UserDto({ id: payload.id, login: payload.login });
+    return { accessToken, refreshToken, safeUser };
   }
 }
 
